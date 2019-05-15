@@ -1,0 +1,9 @@
+{
+	"github_username": "alphardex",
+	"project_name": "Bangumi",
+	"project_slug": "{{ cookiecutter.project_name.lower()|replace(' ', '_')|replace('-', '_')|replace('.', '_')|trim() }}",
+	"short_description": "A Bangumi CRUD SPA based on Vue.js and Flask.",
+	"_copy_without_render": [
+		"*.vue"
+	]
+}

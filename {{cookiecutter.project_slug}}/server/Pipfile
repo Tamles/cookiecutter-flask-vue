@@ -1,0 +1,18 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.douban.com/simple"
+verify_ssl = true
+
+[dev-packages]
+ptpython = "*"
+yapf = "*"
+pylint = "*"
+
+[packages]
+flask = "*"
+flask-cors = "*"
+flask-restful = "*"
+flask-sqlalchemy = "*"
+flask-migrate = "*"
+python-dotenv = "*"
+arrow = "*"
