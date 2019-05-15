@@ -1,6 +1,6 @@
-# {{project_name}}
+# {{cookiecutter.project_name}}
 
-{{short_description}}
+{{cookiecutter.short_description}}
 
 ## Quick Start
 
@@ -9,7 +9,7 @@ First, start two terminal screen T1(client), T2(server)
 ### Build
 
 ``` bash
-git clone https://github.com/{{github_username}}/{{project_slug}}
+git clone https://github.com/{{cookiecutter.github_username}}/{{cookiecutter.project_slug}}
 
 # T1
 cd client
