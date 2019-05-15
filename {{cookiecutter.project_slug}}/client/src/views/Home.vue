@@ -179,7 +179,7 @@ export default {
       .then(res => {
         this.bangumis = res.data.map(bangumi => ({
           ...bangumi,
-          key: {{cookiecutter.project_slug}}.id
+          key: bangumi.id
         }));
       })
       .catch(err => {
