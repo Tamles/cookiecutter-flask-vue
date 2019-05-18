@@ -33,7 +33,7 @@
               'time',
               { rules: [{ required: true, message: '请输入上映时间！' }] }
             ]"
-            placeholder="上映时间"
+            placeholder="上映时间（格式：YYYY-MM-DD）"
           >
           </a-input>
         </a-form-item>

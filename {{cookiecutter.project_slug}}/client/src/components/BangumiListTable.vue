@@ -23,7 +23,9 @@
           <template v-else>
             <div v-if="col == 'time'">{{ moment(text).format("LL") }}</div>
             <div v-else-if="col == 'url'">
-              <a target="_blank" :href="text"><a-icon type="link"></a-icon></a>
+              <a target="_blank" :href="text">
+                <a-icon type="link"></a-icon>
+              </a>
             </div>
             <div v-else>{{ text }}</div>
           </template>
@@ -68,6 +70,7 @@
 import BangumiCreationForm from "@/components/BangumiCreationForm";
 import axios from "axios";
 import moment from "moment";
+import _ from "lodash";
 
 const bangumiApi = "http://localhost:5000/api/v1/bangumis";
 
@@ -118,15 +121,17 @@ export default {
       axios
         .get(bangumiApi, { params })
         .then(res => {
+          this.loading = false;
           this.bangumis = res.data.results.map(bangumi => ({
             ...bangumi,
             key: bangumi.id
           }));
-          this.loading = false;
-          const pagination = { ...this.pagination };
-          pagination.total = res.data.total;
-          pagination.pageSize = res.data.page_size;
-          this.pagination = pagination;
+          this.pagination = {
+            ...this.pagination,
+            total: res.data.total,
+            pageSize: res.data.page_size
+          };
+          this.cacheData = _.cloneDeep(this.bangumis);
         })
         .catch(err => {
           console.log(err);
@@ -155,19 +160,16 @@ export default {
       });
     },
     handleTableChange(pagination) {
-      const pager = { ...this.pagination };
-      pager.current = pagination.current;
-      this.pagination = pager;
+      this.pagination = { ...this.pagination, current: pagination.current };
       this.fetch({
         page: pagination.current
       });
     },
     onDelete(key) {
-      const bangumis = [...this.bangumis];
       axios
         .delete(`${bangumiApi}/${key}`)
         .then(() => {
-          this.bangumis = bangumis.filter(item => item.key !== key);
+          this.bangumis = this.bangumis.filter(item => item.key !== key);
         })
         .catch(err => {
           console.log(err);
@@ -175,15 +177,14 @@ export default {
     },
     handleChange(value, key, column) {
       const bangumis = [...this.bangumis];
-      const target = bangumis.filter(item => key === item.key)[0];
+      const target = bangumis.find(item => item.key === key);
       if (target) {
         target[column] = value;
-        this.bangumis = bangumis;
       }
     },
     edit(key) {
       const bangumis = [...this.bangumis];
-      const target = bangumis.filter(item => key === item.key)[0];
+      const target = bangumis.find(item => item.key === key);
       if (target) {
         target.editable = true;
         this.bangumis = bangumis;
@@ -191,28 +192,24 @@ export default {
     },
     save(key) {
       const bangumis = [...this.bangumis];
-      const target = bangumis.filter(item => key === item.key)[0];
+      const target = bangumis.find(item => item.key === key);
       if (target) {
         delete target.editable;
-        console.log(target);
         axios
           .put(`${bangumiApi}/${key}`, target)
           .then(() => {
+            this.cacheData = _.cloneDeep(this.bangumis);
             this.bangumis = bangumis;
-            this.cacheData = bangumis.map(item => ({ ...item }));
           })
           .catch(err => console.log(err));
       }
     },
     cancel(key) {
       const bangumis = [...this.bangumis];
-      const target = bangumis.filter(item => key === item.key)[0];
+      const target = bangumis.find(item => item.key === key);
       if (target) {
-        Object.assign(
-          target,
-          this.cacheData.filter(item => key === item.key)[0]
-        );
         delete target.editable;
+        Object.assign(target, this.cacheData.find(item => item.key === key));
         this.bangumis = bangumis;
       }
     }
