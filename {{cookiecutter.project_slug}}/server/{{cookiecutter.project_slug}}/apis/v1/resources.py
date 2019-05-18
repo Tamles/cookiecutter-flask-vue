@@ -4,7 +4,7 @@ from flask_restful import Resource, marshal_with, reqparse
 from {{cookiecutter.project_slug}}.extensions import db
 from {{cookiecutter.project_slug}}.models import Bangumi
 from {{cookiecutter.project_slug}}.apis.v1.fields import bangumi_fields
-from {{cookiecutter.project_slug}}.apis.v1.utils import non_empty_str, non_empty_datetime
+from {{cookiecutter.project_slug}}.apis.v1.utils import non_empty_str, non_empty_datetime, non_empty_int
 
 
 class BangumiApi(Resource):

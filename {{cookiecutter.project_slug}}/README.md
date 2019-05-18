@@ -30,6 +30,13 @@ flask db migrate
 flask db upgrade
 ```
 
+If you just want some fake data, run
+
+``` bash
+# T2
+flask forge
+```
+
 ### Run
 
 Run backend
