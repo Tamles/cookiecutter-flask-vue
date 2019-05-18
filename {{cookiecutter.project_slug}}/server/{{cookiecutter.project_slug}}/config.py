@@ -11,6 +11,7 @@ class BaseConfig:
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'f43hrt53et53'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
+    BANGUMI_PER_PAGE = 16
 
 
 class DevelopmentConfig(BaseConfig):

@@ -40,10 +40,10 @@
         <a-form-item>
           <a-input
             v-decorator="[
-              'company',
-              { rules: [{ required: true, message: '请输入制作社！' }] }
+              'url',
+              { rules: [{ required: true, message: '请输入链接！' }] }
             ]"
-            placeholder="制作社"
+            placeholder="链接"
           >
           </a-input>
         </a-form-item>
