@@ -1,0 +1,20 @@
+Retrieve a specific bangumi.
+---
+parameters:
+    - in: path
+      name: bangumi_id
+      required: true
+      decsription: The id of bangumi
+      type: integer
+responses:
+    200:
+        description: The bangumi data
+        schema:
+            id: Bangumi
+            properties:
+                name:
+                    type: string
+                time:
+                    type: string
+                url:
+                    type: string

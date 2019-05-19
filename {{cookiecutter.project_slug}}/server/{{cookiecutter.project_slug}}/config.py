@@ -1,7 +1,6 @@
 import os
 import sys
 
-
 basedir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 WIN = sys.platform.startswith('win')
 prefix = 'sqlite:///' if WIN else 'sqlite:////'
@@ -12,6 +11,9 @@ class BaseConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     DEBUG_TB_INTERCEPT_REDIRECTS = False
     BANGUMI_PER_PAGE = 16
+    SWAGGER = {
+        'doc_dir': os.path.join(basedir, 'bangumi', 'apis', 'v1', 'docs')
+    }
 
 
 class DevelopmentConfig(BaseConfig):
@@ -25,7 +27,8 @@ class TestingConfig(BaseConfig):
 
 
 class ProductionConfig(BaseConfig):
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))
+    SQLALCHEMY_DATABASE_URI = os.getenv(
+        'DATABASE_URL', prefix + os.path.join(basedir, 'data.db'))
 
 
 config = {

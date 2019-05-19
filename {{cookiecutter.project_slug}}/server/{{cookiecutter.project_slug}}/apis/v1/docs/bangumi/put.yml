@@ -1,0 +1,17 @@
+Update a specific bangumi.
+---
+parameters:
+  - in: path
+    name: bangumi_id
+    required: true
+    decsription: The id of bangumi
+    type: integer
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/Bangumi"
+responses:
+  201:
+    description: The bangumi has been updated
+    schema:
+      $ref: "#/definitions/Bangumi"

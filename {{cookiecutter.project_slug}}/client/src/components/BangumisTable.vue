@@ -2,11 +2,11 @@
   <div>
     <a-table
       :columns="columns"
-      :dataSource="bangumis"
+      :data-source="bangumis"
       :loading="loading"
       :pagination="pagination"
-      @change="handleTableChange"
       bordered
+      @change="handleTableChange"
     >
       <template
         v-for="col in ['name', 'time', 'url']"
@@ -24,7 +24,7 @@
             <div v-if="col == 'time'">{{ moment(text).format("LL") }}</div>
             <div v-else-if="col == 'url'">
               <a target="_blank" :href="text">
-                <a-icon type="link"></a-icon>
+                <a-icon type="link" />
               </a>
             </div>
             <div v-else>{{ text }}</div>
@@ -33,13 +33,13 @@
       </template>
       <template slot="operation" slot-scope="text, record">
         <span v-if="record.editable">
-          <a @click="() => save(record.key)"> <a-icon type="save"/></a>
+          <a @click="() => save(record.key)"> <a-icon type="save" /></a>
           <a-popconfirm title="确定取消？" @confirm="() => cancel(record.key)">
-            <a> <a-icon type="close"/></a>
+            <a> <a-icon type="close" /></a>
           </a-popconfirm>
         </span>
         <span v-else>
-          <a @click="() => edit(record.key)"> <a-icon type="edit"/></a>
+          <a @click="() => edit(record.key)"> <a-icon type="edit" /></a>
         </span>
         <a-divider type="vertical" />
         <a-popconfirm
@@ -47,7 +47,7 @@
           title="确定删除?"
           @confirm="() => onDelete(record.key)"
         >
-          <a href="javascript:;"> <a-icon type="delete"/></a>
+          <a href="javascript:;"> <a-icon type="delete" /></a>
         </a-popconfirm>
       </template>
       <template slot="title">
@@ -67,43 +67,38 @@
 </template>
 
 <script>
-import BangumiCreationForm from "@/components/BangumiCreationForm";
-import axios from "axios";
-import moment from "moment";
-import _ from "lodash";
-
-const bangumiApi = "http://localhost:5000/api/v1/bangumis";
+import BangumiCreationForm from '@/components/BangumiCreationForm'
+import { createBangumi, retrieveBangumis, updateBangumi, deleteBangumi } from '@/apis/bangumi'
+import moment from 'moment'
+import _ from 'lodash'
 
 const columns = [
   {
-    title: "番剧名",
-    dataIndex: "name",
-    scopedSlots: { customRender: "name" }
+    title: '番剧名',
+    dataIndex: 'name',
+    scopedSlots: { customRender: 'name' }
   },
   {
-    title: "上映时间",
-    dataIndex: "time",
-    scopedSlots: { customRender: "time" }
+    title: '上映时间',
+    dataIndex: 'time',
+    scopedSlots: { customRender: 'time' }
   },
   {
-    title: "链接",
-    dataIndex: "url",
-    scopedSlots: { customRender: "url" }
+    title: '链接',
+    dataIndex: 'url',
+    scopedSlots: { customRender: 'url' }
   },
   {
-    title: "操作",
-    dataIndex: "operation",
-    scopedSlots: { customRender: "operation" }
+    title: '操作',
+    dataIndex: 'operation',
+    scopedSlots: { customRender: 'operation' }
   }
-];
+]
 
 export default {
-  name: "BangumiListTable",
+  name: 'BangumisTable',
   components: {
     BangumiCreationForm
-  },
-  mounted() {
-    this.fetch();
   },
   data() {
     return {
@@ -113,106 +108,106 @@ export default {
       visible: false,
       loading: false,
       pagination: {}
-    };
+    }
+  },
+  mounted() {
+    this.fetch()
   },
   methods: {
     fetch(params = {}) {
-      this.loading = true;
-      axios
-        .get(bangumiApi, { params })
+      this.loading = true
+      retrieveBangumis(params)
         .then(res => {
-          this.loading = false;
+          this.loading = false
           this.bangumis = res.data.results.map(bangumi => ({
             ...bangumi,
             key: bangumi.id
-          }));
+          }))
           this.pagination = {
             ...this.pagination,
             total: res.data.total,
             pageSize: res.data.page_size
-          };
-          this.cacheData = _.cloneDeep(this.bangumis);
+          }
+          this.cacheData = _.cloneDeep(this.bangumis)
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     moment(date) {
-      return moment(date);
+      return moment(date)
     },
     showModal() {
-      this.visible = true;
+      this.visible = true
     },
     handleCancel() {
-      this.visible = false;
+      this.visible = false
     },
     handleCreate() {
-      const form = this.$refs.bangumiForm.form;
+      const form = this.$refs.bangumiForm.form
       form.validateFields((err, values) => {
         if (err) {
-          return;
+          return
         }
-        axios.post(bangumiApi, values).then(res => {
-          this.bangumis.push({ ...res.data, key: res.data.id });
-        });
-        form.resetFields();
-        this.visible = false;
-      });
+        createBangumi(values).then(res => {
+          this.bangumis.push({ ...res.data, key: res.data.id })
+        })
+        form.resetFields()
+        this.visible = false
+      })
     },
     handleTableChange(pagination) {
-      this.pagination = { ...this.pagination, current: pagination.current };
+      this.pagination = { ...this.pagination, current: pagination.current }
       this.fetch({
         page: pagination.current
-      });
+      })
     },
     onDelete(key) {
-      axios
-        .delete(`${bangumiApi}/${key}`)
+      deleteBangumi(key)
         .then(() => {
-          this.bangumis = this.bangumis.filter(item => item.key !== key);
+          this.bangumis = this.bangumis.filter(item => item.key !== key)
         })
         .catch(err => {
-          console.log(err);
-        });
+          console.log(err)
+        })
     },
     handleChange(value, key, column) {
-      const bangumis = [...this.bangumis];
-      const target = bangumis.find(item => item.key === key);
+      const bangumis = [...this.bangumis]
+      const target = bangumis.find(item => item.key === key)
       if (target) {
-        target[column] = value;
+        target[column] = value
       }
     },
     edit(key) {
-      const bangumis = [...this.bangumis];
-      const target = bangumis.find(item => item.key === key);
+      const bangumis = [...this.bangumis]
+      const target = bangumis.find(item => item.key === key)
       if (target) {
-        target.editable = true;
-        this.bangumis = bangumis;
+        target.editable = true
+        this.bangumis = bangumis
       }
     },
     save(key) {
-      const bangumis = [...this.bangumis];
-      const target = bangumis.find(item => item.key === key);
+      const bangumis = [...this.bangumis]
+      const target = bangumis.find(item => item.key === key)
       if (target) {
-        delete target.editable;
-        axios
-          .put(`${bangumiApi}/${key}`, target)
+        delete target.editable
+        updateBangumi(key, target)
           .then(() => {
-            this.cacheData = _.cloneDeep(this.bangumis);
-            this.bangumis = bangumis;
+            this.cacheData = _.cloneDeep(this.bangumis)
+            this.bangumis = bangumis
           })
-          .catch(err => console.log(err));
+          .catch(err => console.log(err))
       }
     },
     cancel(key) {
-      const bangumis = [...this.bangumis];
-      const target = bangumis.find(item => item.key === key);
+      const bangumis = [...this.bangumis]
+      const target = bangumis.find(item => item.key === key)
       if (target) {
-        delete target.editable;
-        Object.assign(target, this.cacheData.find(item => item.key === key));
-        this.bangumis = bangumis;
+        delete target.editable
+        Object.assign(target, this.cacheData.find(item => item.key === key))
+        this.bangumis = bangumis
       }
     }
   }
-};
+}
 </script>

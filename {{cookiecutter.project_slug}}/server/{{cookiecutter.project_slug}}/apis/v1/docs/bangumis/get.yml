@@ -1,0 +1,26 @@
+Retrieve a list of bangumis.
+---
+parameters:
+  - in: query
+    name: page
+    description: The page of bangumis
+    type: integer
+  - in: query
+    name: per_page
+    description: The amount of bangumis at per page
+    type: integer
+responses:
+  200:
+    description: A list of bangumis
+    schema:
+      id: Bangumis
+      properties:
+        total:
+          type: integer
+        page_size:
+          type: integer
+        results:
+          type: array
+          items:
+            type: object
+            $ref: "#/definitions/Bangumi"

@@ -1,0 +1,12 @@
+Create a bangumi.
+---
+parameters:
+  - in: body
+    name: body
+    schema:
+      $ref: "#/definitions/Bangumi"
+responses:
+  201:
+    description: The bangumi has been created
+    schema:
+      $ref: "#/definitions/Bangumi"

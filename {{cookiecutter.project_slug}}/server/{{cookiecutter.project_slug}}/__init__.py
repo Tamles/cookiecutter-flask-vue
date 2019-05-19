@@ -25,6 +25,7 @@ def create_app(config_name=None):
 def register_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db)
+    swagger.init_app(app)
 
 
 def register_blueprints(app):

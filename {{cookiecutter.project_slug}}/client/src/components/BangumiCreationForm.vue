@@ -3,6 +3,8 @@
     <a-modal
       title="添加番剧"
       :visible="visible"
+      ok-text="保存"
+      cancel-text="取消"
       @cancel="
         () => {
           $emit('cancel');
@@ -13,8 +15,6 @@
           $emit('create');
         }
       "
-      okText="保存"
-      cancelText="取消"
     >
       <a-form :form="form">
         <a-form-item>
@@ -24,8 +24,7 @@
               { rules: [{ required: true, message: '请输入番剧名！' }] }
             ]"
             placeholder="番剧名"
-          >
-          </a-input>
+          />
         </a-form-item>
         <a-form-item>
           <a-input
@@ -34,8 +33,7 @@
               { rules: [{ required: true, message: '请输入上映时间！' }] }
             ]"
             placeholder="上映时间（格式：YYYY-MM-DD）"
-          >
-          </a-input>
+          />
         </a-form-item>
         <a-form-item>
           <a-input
@@ -44,8 +42,7 @@
               { rules: [{ required: true, message: '请输入链接！' }] }
             ]"
             placeholder="链接"
-          >
-          </a-input>
+          />
         </a-form-item>
       </a-form>
     </a-modal>
@@ -54,10 +51,12 @@
 
 <script>
 export default {
-  name: "BangumiCreationForm",
-  props: ["visible"],
+  name: 'BangumiCreationForm',
+  props: {
+    visible: Boolean
+  },
   beforeCreate() {
-    this.form = this.$form.createForm(this);
+    this.form = this.$form.createForm(this)
   }
-};
+}
 </script>

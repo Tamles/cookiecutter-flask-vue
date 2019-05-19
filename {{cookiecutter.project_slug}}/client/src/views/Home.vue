@@ -1,15 +1,15 @@
 <template>
   <div class="home">
-    <bangumi-list-table></bangumi-list-table>
+    <bangumis-table />
   </div>
 </template>
 
 <script>
-import BangumiListTable from "@/components/BangumiListTable";
+import BangumisTable from '@/components/BangumisTable'
 
 export default {
   components: {
-    BangumiListTable
+    BangumisTable
   }
-};
+}
 </script>
