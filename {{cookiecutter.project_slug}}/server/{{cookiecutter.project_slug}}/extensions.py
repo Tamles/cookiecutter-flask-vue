@@ -4,4 +4,4 @@ from flasgger import Swagger
 
 db = SQLAlchemy()
 migrate = Migrate()
-swagger = Swagger(parse=True)
+swagger = Swagger()
