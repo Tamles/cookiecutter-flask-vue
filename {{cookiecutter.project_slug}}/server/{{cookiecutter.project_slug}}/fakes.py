@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 import arrow
-from bangumi import db
+from {{cookiecutter.project_slug}} import db
 from {{cookiecutter.project_slug}}.models import Bangumi
 
 bangumis = json.loads(Path('bangumi.json').read_text(encoding='utf-8'), encoding='utf-8')
